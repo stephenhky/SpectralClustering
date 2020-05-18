@@ -11,51 +11,26 @@ fi
 cd installing
 
 # loading pre-existing packages
-#module load LAPACK/3.8.0/gcc-7.2.0-64    # loaded in python/3.7
+module load cmake/3.15.2
+module load LAPACK/3.8.0/gcc-7.2.0-64    # loaded in python/3.7
 module load python/3.7     # with openBLAS, LAPACK
-
-# installing cmake
-if [ ! -f $HOME/installing/cmake ]; then
-  mkdir cmake
-fi
-cd cmake
-wget https://github.com/Kitware/CMake/releases/download/v3.17.2/cmake-3.17.2.tar.gz
-tar xvzf cmake-3.17.2.tar.gz
-mkdir $HOME/modules/cmake
-cd cmake-3.17.2/
-./configure --prefix=$HOME/modules/cmake
-./bootstrap
-make
-make install
-export PATH=$HOME/modules/cmake/bin:$PATH
+module load CUDA/10.2
 
 # installing ARPACK
 cd $HOME/installing
-git clone https://github.com/yuj-umd/arpackpp.git
+git clone https://github.com/stephenhky/arpackpp    # updated links for SuperLU
 cd arpackpp
 # openBLAS
 ./install-openblas.sh    # build
-cd external/OpenBLAS/
-mkdir $HOME/modules/OpenBLAS
-make PREFIX=$HOME/modules/OpenBLAS install
-cd ../..
-ln -s $HOME/modules/OpenBLAS/lib/libopenblas.a external/libopenblas.a
 # ARPACK
-if [ -f $HOME/installing/arpackpp/external/arpack-ng ]; then
-  rm -rf $HOME/installing/arpackpp/external/arpack-ng
-fi
-if [ -f $HOME/installing/arpackpp/external/arpack-ng-build ]; then
-  rm -rf $HOME/installing/arpackpp/external/arpack-ng-build
-fi
-#./install-arpack-ng.sh
-set -ex
-mkdir -p external
-cd external
-git clone https://github.com/opencollab/arpack-ng.git
-mkdir arpack-ng-build
-cd arpack-ng-build
-cmake -D BLAS_goto2_LIBRARY=../libopenblas.a ../arpack-ng
-make
-cd ../
-ln -s arpack-ng-build/libarpack.a ./
-cd ../
+./install-arpack-ng.sh
+# Supernodal LU
+./install-superlu.sh
+# SuiteSparse
+./install-suitesparse.sh
+
+cd ..
+
+# FastSC
+git clone https://github.com/yuj-umd/fastsc.git
+cd fastsc
