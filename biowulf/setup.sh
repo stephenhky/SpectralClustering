@@ -12,7 +12,7 @@ cd installing
 
 # loading pre-existing packages
 #module load LAPACK/3.8.0/gcc-7.2.0-64    # loaded in python/3.7
-module load load python/3.7     # with openBLAS, LAPACK
+module load python/3.7     # with openBLAS, LAPACK
 
 # installing cmake
 if [ ! -f $HOME/installing/cmake ]; then
@@ -30,7 +30,32 @@ make install
 export PATH=$HOME/modules/cmake/bin:$PATH
 
 # installing ARPACK
+cd $HOME/installing
 git clone https://github.com/yuj-umd/arpackpp.git
 cd arpackpp
-./install-openblas.sh
-./install-arpack-ng.sh
+# openBLAS
+./install-openblas.sh    # build
+cd external/OpenBLAS/
+mkdir $HOME/modules/OpenBLAS
+make PREFIX=$HOME/modules/OpenBLAS install
+cd ../..
+ln -s $HOME/modules/OpenBLAS/lib/libopenblas.a external/libopenblas.a
+# ARPACK
+if [ -f $HOME/installing/arpackpp/external/arpack-ng ]; then
+  rm -rf $HOME/installing/arpackpp/external/arpack-ng
+fi
+if [ -f $HOME/installing/arpackpp/external/arpack-ng-build ]; then
+  rm -rf $HOME/installing/arpackpp/external/arpack-ng-build
+fi
+#./install-arpack-ng.sh
+set -ex
+mkdir -p external
+cd external
+git clone https://github.com/opencollab/arpack-ng.git
+mkdir arpack-ng-build
+cd arpack-ng-build
+cmake -D BLAS_goto2_LIBRARY=../libopenblas.a ../arpack-ng
+make
+cd ../
+ln -s arpack-ng-build/libarpack.a ./
+cd ../
