@@ -29,8 +29,10 @@ cd arpackpp
 # SuiteSparse
 ./install-suitesparse.sh
 
+ln -s examples/reverse/sym/rsymsol.h include/rsymsol.h   # very important to link this file or the compilation will fail
 cd ..
 
 # FastSC
-git clone https://github.com/yuj-umd/fastsc.git
+git clone https://github.com/stephenhky/fastsc
 cd fastsc
+make
