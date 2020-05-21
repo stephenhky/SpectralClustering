@@ -13,7 +13,7 @@ cd installing
 # loading pre-existing packages
 module load cmake/3.15.2
 module load LAPACK/3.8.0/gcc-7.2.0-64    # loaded in python/3.7
-module load python/3.7     # with openBLAS, LAPACK
+#module load python/3.7     # with openBLAS, LAPACK
 module load CUDA/10.2
 
 # installing ARPACK
