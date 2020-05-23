@@ -1,6 +1,5 @@
 #!/bin/bash
 
-#SBATCH
 #SBATCH --output=/tmp/fastsc.output%A.tmp
 #SBATCH --error=/tmp/fastsc.error%A.tmp
 #SBATCH --gres=gpu:k80:1
