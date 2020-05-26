@@ -1,20 +1,34 @@
 
 from itertools import product
+from functools import partial
 
 import numpy as np
 from scipy.sparse import dok_matrix
 from scipy.sparse.linalg import eigs
-from scipy.spatial.distance import sqeuclidean
+from scipy.spatial.distance import sqeuclidean, cosine
+from scipy.stats import pearsonr
 from sklearn.cluster import k_means
 
 
-def compute_affinity_matrix(X, sigma=0.1):
+# similarity functions
+def gaussian_ij(X, i, j, sigma=0.1):
+    return np.exp(-sqeuclidean(X[i, :], X[j, :])/(2*sigma*sigma))
+
+
+def cosine_ij(X, i, j):
+    return 1-cosine(X[i, :], X[j, :])
+
+
+def corr_ij(X, i, j):
+    return pearsonr(X[i, :], X[j, :])
+
+
+def compute_affinity_matrix(X, simfcn=partial(gaussian_ij, sigma=0.1)):
     nbdata = X.shape[0]
     affmat = dok_matrix((nbdata, nbdata))
-    squared_sigma = sigma * sigma
 
     for i, j in product(range(nbdata), range(nbdata)):
-        affmat[i, j] = np.exp(-sqeuclidean(X[i, :], X[j, :])/(2*squared_sigma))
+        affmat[i, j] = simfcn(X, i, j)
 
     return affmat
 
