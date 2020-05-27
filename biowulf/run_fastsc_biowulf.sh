@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#SBATCH --output=/tmp/fastsc.output%A.tmp
-#SBATCH --error=/tmp/fastsc.error%A.tmp
+#SBATCH --output=$HOME/.fastsc/fastsc.output%A.tmp
+#SBATCH --error=$HOME/.fastsc/fastsc.error%A.tmp
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:k80:1
 
