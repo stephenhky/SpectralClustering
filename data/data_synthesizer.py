@@ -54,6 +54,6 @@ def generate_gaussian_mixtures(nbclusters, nbdata, nbdim=2, numerical_ranges=(-1
     cluster_choices = np.random.choice(range(nbclusters), size=nbdata)
     for i in range(nbdata):
         points[i, :] = np.random.multivariate_normal(mean=centroids[cluster_choices[i], :],
-                                                     scale=scale)
+                                                     cov=np.diag([scale]*nbdim))
 
     return points
