@@ -49,7 +49,7 @@ def generate_gaussian_mixtures(nbclusters, nbdata, nbdim=2, numerical_ranges=(-1
     centroids = np.random.uniform(low=numerical_ranges[0],
                                   high=numerical_ranges[1],
                                   size=nbdim*nbclusters).\
-        resize((nbclusters, nbdim))
+        reshape((nbclusters, nbdim))
 
     points = np.zeros((nbdata, nbdim))
     cluster_choices = np.random.choice(range(nbclusters), size=nbdata)
