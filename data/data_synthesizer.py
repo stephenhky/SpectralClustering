@@ -48,7 +48,8 @@ def generate_circular_layers(nblayers, nbdata, seed=None):
 def generate_gaussian_mixtures(nbclusters, nbdata, nbdim=2, numerical_ranges=(-10., 10), scale=1.0):
     centroids = np.random.uniform(low=numerical_ranges[0],
                                   high=numerical_ranges[1],
-                                  size=nbdim*nbclusters)
+                                  size=nbdim*nbclusters).\
+        resize((nbclusters, nbdim))
 
     points = np.zeros((nbdata, nbdim))
     cluster_choices = np.random.choice(range(nbclusters), size=nbdata)
